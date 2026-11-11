@@ -1,0 +1,81 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Admin authorization check - verified via admin document or server-authenticated token
+    function isAdmin() {
+      return isSignedIn() && (
+        exists(/databases/$(database)/documents/admin_accounts/$(request.auth.uid)) ||
+        request.auth.token.email == 'asadullaisomiddinov54@gmail.com'
+      );
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Vehicles collection
+    match /vehicles/{vehicleId} {
+      allow read: if isValidId(vehicleId) && (
+        resource.data.isPublished == true ||
+        isAdmin()
+      );
+      allow list: if resource.data.isPublished == true || isAdmin();
+      allow create, update, delete: if isAdmin() && isValidId(vehicleId);
+    }
+
+    // Bookings collection (customers can submit, only admins can view/manage)
+    match /bookings/{bookingId} {
+      allow create: if isValidId(bookingId) &&
+        request.resource.data.fullName is string &&
+        request.resource.data.fullName.size() > 0 &&
+        request.resource.data.fullName.size() <= 150 &&
+        request.resource.data.phone is string &&
+        request.resource.data.phone.size() > 0 &&
+        request.resource.data.phone.size() <= 50;
+      allow read, update, delete: if isAdmin() && isValidId(bookingId);
+      allow list: if isAdmin();
+    }
+
+    // Inquiries collection
+    match /inquiries/{inquiryId} {
+      allow create: if isValidId(inquiryId) &&
+        request.resource.data.fullName is string &&
+        request.resource.data.fullName.size() > 0 &&
+        request.resource.data.fullName.size() <= 150 &&
+        request.resource.data.message is string &&
+        request.resource.data.message.size() > 0 &&
+        request.resource.data.message.size() <= 2000;
+      allow read, update, delete: if isAdmin() && isValidId(inquiryId);
+      allow list: if isAdmin();
+    }
+
+    // Admin accounts collection (Super admin and authorized staff)
+    match /admin_accounts/{accountId} {
+      allow read, write: if isAdmin() && isValidId(accountId);
+      allow list: if isAdmin();
+    }
+
+    // Audit logs collection (Read/created by admins for system transparency)
+    match /audit_logs/{logId} {
+      allow read, create: if isAdmin() && isValidId(logId);
+      allow update, delete: if false; // Immutable audit log
+      allow list: if isAdmin();
+    }
+
+    // Website & Salon settings (Public read for branding/socials, admin write)
+    match /settings/{settingId} {
+      allow read: if isValidId(settingId);
+      allow write: if isAdmin() && isValidId(settingId);
+    }
+  }
+}

@@ -1,0 +1,141 @@
+{
+  "entities": {
+    "Vehicle": {
+      "title": "Vehicle",
+      "description": "Automotive vehicle listing in IAS Auto Salon catalog",
+      "type": "object",
+      "properties": {
+        "brand": { "type": "string", "maxLength": 100 },
+        "model": { "type": "string", "maxLength": 100 },
+        "year": { "type": "number" },
+        "price": { "type": "number" },
+        "mileage": { "type": "number" },
+        "fuelType": { "type": "string", "maxLength": 50 },
+        "transmission": { "type": "string", "maxLength": 50 },
+        "bodyType": { "type": "string", "maxLength": 50 },
+        "color": { "type": "string", "maxLength": 50 },
+        "interiorColor": { "type": "string", "maxLength": 50 },
+        "engine": { "type": "string", "maxLength": 100 },
+        "power": { "type": "number" },
+        "driveType": { "type": "string", "maxLength": 20 },
+        "descriptionUz": { "type": "string", "maxLength": 5000 },
+        "descriptionRu": { "type": "string", "maxLength": 5000 },
+        "status": { "type": "string", "maxLength": 20 },
+        "isPublished": { "type": "boolean" },
+        "isFeatured": { "type": "boolean" },
+        "createdByAdminId": { "type": "string", "maxLength": 50 },
+        "createdAt": { "type": "string", "maxLength": 50 },
+        "updatedAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["brand", "model", "year", "price", "status"]
+    },
+    "Booking": {
+      "title": "Booking",
+      "description": "Test-drive appointment booking submitted by a customer",
+      "type": "object",
+      "properties": {
+        "fullName": { "type": "string", "maxLength": 150 },
+        "phone": { "type": "string", "maxLength": 50 },
+        "vehicleId": { "type": "string", "maxLength": 100 },
+        "vehicleTitle": { "type": "string", "maxLength": 200 },
+        "preferredDate": { "type": "string", "maxLength": 50 },
+        "preferredTime": { "type": "string", "maxLength": 50 },
+        "comments": { "type": "string", "maxLength": 1000 },
+        "status": { "type": "string", "maxLength": 30 },
+        "createdAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["fullName", "phone", "vehicleId", "preferredDate"]
+    },
+    "Inquiry": {
+      "title": "Inquiry",
+      "description": "General customer inquiry or contact message",
+      "type": "object",
+      "properties": {
+        "fullName": { "type": "string", "maxLength": 150 },
+        "phone": { "type": "string", "maxLength": 50 },
+        "email": { "type": "string", "maxLength": 150 },
+        "message": { "type": "string", "maxLength": 2000 },
+        "status": { "type": "string", "maxLength": 30 },
+        "createdAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["fullName", "phone", "message"]
+    },
+    "AdminAccount": {
+      "title": "AdminAccount",
+      "description": "System administrator profile and permission tier",
+      "type": "object",
+      "properties": {
+        "adminId": { "type": "string", "maxLength": 50 },
+        "name": { "type": "string", "maxLength": 150 },
+        "email": { "type": "string", "maxLength": 150 },
+        "role": { "type": "string", "maxLength": 30 },
+        "status": { "type": "string", "maxLength": 30 },
+        "requirePasswordChange": { "type": "boolean" },
+        "createdAt": { "type": "string", "maxLength": 50 },
+        "lastLoginAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["adminId", "name", "role", "status"]
+    },
+    "AuditLog": {
+      "title": "AuditLog",
+      "description": "Administrative security audit trail event",
+      "type": "object",
+      "properties": {
+        "adminId": { "type": "string", "maxLength": 50 },
+        "adminName": { "type": "string", "maxLength": 150 },
+        "action": { "type": "string", "maxLength": 100 },
+        "details": { "type": "string", "maxLength": 1000 },
+        "entityType": { "type": "string", "maxLength": 50 },
+        "entityId": { "type": "string", "maxLength": 100 },
+        "timestamp": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["adminId", "action", "timestamp"]
+    },
+    "SalonSettings": {
+      "title": "SalonSettings",
+      "description": "Global website configuration, social media links, and contacts",
+      "type": "object",
+      "properties": {
+        "salonName": { "type": "string", "maxLength": 100 },
+        "taglineUz": { "type": "string", "maxLength": 200 },
+        "taglineRu": { "type": "string", "maxLength": 200 },
+        "telegramLink": { "type": "string", "maxLength": 250 },
+        "instagramLink": { "type": "string", "maxLength": 250 },
+        "phonePrimary": { "type": "string", "maxLength": 50 },
+        "phoneSecondary": { "type": "string", "maxLength": 50 },
+        "addressUz": { "type": "string", "maxLength": 250 },
+        "addressRu": { "type": "string", "maxLength": 250 },
+        "workingHours": { "type": "string", "maxLength": 100 },
+        "usdToUzsRate": { "type": "number" },
+        "updatedAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["salonName", "telegramLink", "instagramLink"]
+    }
+  },
+  "firestore": {
+    "/vehicles/{vehicleId}": {
+      "schema": { "$ref": "#/entities/Vehicle" },
+      "description": "Public automotive vehicle inventory catalog"
+    },
+    "/bookings/{bookingId}": {
+      "schema": { "$ref": "#/entities/Booking" },
+      "description": "Customer test drive appointment reservations"
+    },
+    "/inquiries/{inquiryId}": {
+      "schema": { "$ref": "#/entities/Inquiry" },
+      "description": "Customer contact inquiries"
+    },
+    "/admin_accounts/{accountId}": {
+      "schema": { "$ref": "#/entities/AdminAccount" },
+      "description": "Authorized administrators roster with role and status"
+    },
+    "/audit_logs/{logId}": {
+      "schema": { "$ref": "#/entities/AuditLog" },
+      "description": "Chronological audit trail of all administrative actions"
+    },
+    "/settings/{settingId}": {
+      "schema": { "$ref": "#/entities/SalonSettings" },
+      "description": "Global salon configuration including social handles and contacts"
+    }
+  }
+}

@@ -1,0 +1,8 @@
+# Allow crawling of public car catalog and landing pages
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://ias-autosalon.uz/sitemap.xml
