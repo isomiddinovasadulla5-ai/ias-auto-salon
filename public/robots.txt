@@ -5,4 +5,4 @@ Disallow: /admin
 Disallow: /api/
 
 # Sitemap location
-Sitemap: https://ias-autosalon.uz/sitemap.xml
+Sitemap: https://ias-auto-salon.vercel.app/sitemap.xml

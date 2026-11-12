@@ -1466,7 +1466,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                     <li>Google Search Console (search.google.com/search-console) ga kiring.</li>
                     <li>Sayt domenini (URL prefix) kiriting.</li>
                     <li>HTML teg yoki fayl orqali tasdiqlang.</li>
-                    <li>Sitemaps bo‘limida <code className="text-amber-300">https://your-site.com/sitemap.xml</code> manzilini yuboring.</li>
+                    <li>Sitemaps bo‘limida <code className="text-amber-300">https://ias-auto-salon.vercel.app/sitemap.xml</code> manzilini yuboring.</li>
                   </ol>
                   <p className="text-[11px] text-amber-300/80 italic mt-2">
                     Eslatma: Google qidiruv tizimida indekslash avtomatik yoki 100% kafolatlangan emas, u Google algoritmlari va kontent sifatiga bog‘liq.
